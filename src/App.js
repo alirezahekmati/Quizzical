@@ -6,9 +6,10 @@ import Start from './Component/Start'
 
 function App() {
 const [start,setStart]=useState(false)
-const [data,setData]=useState([])
 const [end,setEnd]=useState(false)
 const [showGrade,setShowGrade]=useState(false)
+const [loading,setLoading]=useState(false)
+const [data,setData]=useState([])
 const [Grade,setGrade]=useState(0)
 const [answerJsx,setAnswerJsx]=useState([])
 const [answer,setAnswer]=useState(
@@ -26,13 +27,15 @@ function startGame(){
 }
 
 useEffect(() => {
+  setLoading(true)
   async function getQuiz(){
     const respone = await fetch("https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple")
     const data = await respone.json()
+    setLoading(false)
     setData(data.results)
   }
   getQuiz()
-}, [start])
+}, [])
 console.log("o")
 answerArray = data.map(e=> ([...e.incorrect_answers,e.correct_answer]))
 correctAnswerArray = data.map(e=>e.correct_answer)
@@ -49,6 +52,14 @@ function checkAnswer(){
 setGrade(finalGrade.filter(e=> e==true).length)
 }
 function resetGame(){
+  async function getQuiz(){
+    setLoading(true)
+    const respone = await fetch("https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple")
+    const data = await respone.json()
+    setData(data.results)
+    setLoading(false)
+  }
+  getQuiz()
   setStart(false)
   setShowGrade(false)
   setAnswerJsx([])
@@ -58,7 +69,7 @@ function resetGame(){
   return (
     <div className="App">
       <div className='circle Start-circle-1'></div>
-      {showGrade ? answerJsx :(<div className="quiz-container">{start?<>{quizData}</> :  <Start startFunction={startGame}/>}</div>)}
+      {showGrade ? answerJsx :(<div className="quiz-container">{start? (loading ? <h1>loading ....</h1> : <>{quizData}</> ):  <Start startFunction={startGame}/>}</div>)}
       {start &&( end?( <><p>{"correct answer from 5 :" + Grade} </p><button onClick={resetGame}>start again</button></>) : (<button onClick={checkAnswer}>see the resuld </button>))}
       <div className='circle Start-circle-2'></div>
     </div>
