@@ -55,6 +55,7 @@ function resetGame(){
   setShowGrade(false)
   setAnswerJsx([])
   setGrade(0)
+  setAnswer(["😶","😑","😢","😫","😭"])
 }
 console.log("yo3",answerJsx)
   return (
