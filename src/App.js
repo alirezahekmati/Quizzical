@@ -70,7 +70,7 @@ function resetGame(){
     <div className="App">
       <div className='circle Start-circle-1'></div>
       {showGrade ? answerJsx :(<div className="quiz-container">{start? (loading ? <h1>loading ....</h1> : <>{quizData}</> ):  <Start startFunction={startGame}/>}</div>)}
-      {start &&( end?( <><p>{"correct answer from 5 :" + Grade} </p><button onClick={resetGame}>start again</button></>) : (<button onClick={checkAnswer}>see the resuld </button>))}
+      {start &&( end?( <><p>{"correct answer from 5 :" + Grade} </p><button onClick={resetGame}>start again</button></>) : (loading===false &&<button onClick={checkAnswer}>see the resuld </button>))}
       <div className='circle Start-circle-2'></div>
     </div>
   )
